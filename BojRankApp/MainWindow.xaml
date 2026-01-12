@@ -78,6 +78,39 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <TextBlock Text="태그 별 통계 (Top Types)" 
+           FontWeight="Bold" 
+           Margin="0,15,0,5"/>
+
+                <ListView ItemsSource="{Binding SelectedSUser.StatisticsTags}" 
+          Height="120" 
+          BorderBrush="#DDD" 
+          BorderThickness="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="태그" Width="100" DisplayMemberBinding="{Binding TagName}"/>
+                            <GridViewColumn Header="해결" Width="50" DisplayMemberBinding="{Binding TagCount}"/>
+                            <GridViewColumn Header="비율" Width="60" DisplayMemberBinding="{Binding TagPercent, StringFormat={}{0:F1}%}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <TextBlock Text="티어 별 통계 (Tier Distribution)" 
+           FontWeight="Bold" 
+           Margin="0,15,0,5"/>
+
+                <ListView ItemsSource="{Binding SelectedSUser.StatisticsTiers}" 
+          Height="120" 
+          BorderBrush="#DDD" 
+          BorderThickness="1">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="티어" Width="100" DisplayMemberBinding="{Binding TierName}"/>
+                            <GridViewColumn Header="해결" Width="50" DisplayMemberBinding="{Binding TierCount}"/>
+                            <GridViewColumn Header="비율" Width="60" DisplayMemberBinding="{Binding TierPercent, StringFormat={}{0:F1}%}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
 
             </StackPanel>
 

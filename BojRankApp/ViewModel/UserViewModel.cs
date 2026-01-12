@@ -80,6 +80,22 @@ namespace BojRankApp.ViewModel
             }
 
         }
-        
+        // 선택된 사용자의 통계 정보를 담을 속성 추가
+        [ObservableProperty]
+        private SUser? selectedSUser;
+
+        // SelectedUser가 변경될 때마다 호출되는 메서드 (CommunityToolkit.Mvvm이 생성한 partial 메서드 구현)
+        partial void OnSelectedUserChanged(User value)
+        {
+            if (value != null)
+            {
+                // 선택된 사용자를 기반으로 SUser(통계 정보) 생성
+                SelectedSUser = new SUser(value);
+            }
+            else
+            {
+                SelectedSUser = null;
+            }
+        }
     }
 }
