@@ -30,8 +30,6 @@ namespace BojRankApp.ViewModel
         [ObservableProperty]
         private User selectedUser;
 
-
-
         public UserViewModel()
         {
             bojService = new BojService();
@@ -50,6 +48,17 @@ namespace BojRankApp.ViewModel
             Users.Add(user);
         }
 
+        [RelayCommand]
+        public void DelUser()
+        {
+            //User user = await bojService.LoadUser(userId);
+            //User target = Users.FirstOrDefault(u => u.Id == user.Id);
+
+            if (SelectedUser != null)
+            {
+                Users.Remove(SelectedUser);
+            }
+        }
         [RelayCommand]
         public async Task ResetUser()
         {
