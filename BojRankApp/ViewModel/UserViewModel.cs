@@ -27,6 +27,8 @@ namespace BojRankApp.ViewModel
         [ObservableProperty]
         private string userId = string.Empty;
 
+        [ObservableProperty]
+        private SUser? selectedSUser; // 통계
 
         [ObservableProperty]
         private User selectedUser;
@@ -93,9 +95,17 @@ namespace BojRankApp.ViewModel
             {
                 Problems.Add(problem);
             }
+
+            if (value != null)
+            {
+                // 선택된 사용자를 기반으로 SUser(통계 정보) 생성
+                SelectedSUser = new SUser(value);
+            }
+            else
+            {
+                SelectedSUser = null;
+            }
         }
-
-
 
         
     }
