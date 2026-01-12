@@ -8,19 +8,28 @@ namespace BojRankApp.Model
 {
     class User
     {
-        private string id;
+        public const string TierImageUrlPrefix = "https://images.weserv.nl/?url=static.solved.ac/tier_small";
+        public const string TierImageUrlPostfix = ".svg&output=png";
+
         public string Id{ get; set; }
-
-        private int tier;
         public int Tier { get; set; }
-
-        private int rating;
+        public string TierImageUrl { get { return $"{TierImageUrlPrefix}/{Tier}{TierImageUrlPostfix}"; } }
         public int Rating{ get; set; }
-
-        private int solvedCount;
         public int SolvedCount { get; set; }
+        public List<SolvedProblem>? SolvedProblems { get; set; }
 
-        public List<SolvedProblem>? solvedProblem;
-        private List<SolvedProblem>? SolvedProblem { get; set; }
+        public User(
+            string id,
+            int tier,
+            int rating,
+            int solvedCount,
+            List<SolvedProblem> solvedProblems)
+        {
+            Id = id;
+            Tier = tier;
+            Rating = rating;
+            SolvedCount = solvedCount;
+            SolvedProblems = solvedProblems;
+        }
     }
 }

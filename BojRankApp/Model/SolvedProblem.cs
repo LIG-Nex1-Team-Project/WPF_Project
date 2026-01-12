@@ -8,17 +8,17 @@ namespace BojRankApp.Model
 {
     class SolvedProblem
     {
-
-        private int pid;
         public int Pid { get; set; }
-
-        private string? name;
         public string? Name { get; set; }
-
-        private int difficulty;
         public int Difficulty { get; set; }
+        public List<string>? Tags { get; set; }
 
-        private string? tag;
-        public string? Tag { get; set; }
+        public SolvedProblem(int pid, string? name, int difficulty, List<string>? tags)
+        {
+            Pid = pid;
+            Name = name;
+            Difficulty = difficulty;
+            Tags = tags;
+        }
     }
 }

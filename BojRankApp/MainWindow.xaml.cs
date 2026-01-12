@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using BojRankApp.Service;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,6 +9,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BojRankApp.Model;
+using System.Diagnostics;
 
 namespace BojRankApp
 {
@@ -16,9 +19,32 @@ namespace BojRankApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private BojService bojService;
+
         public MainWindow()
         {
             InitializeComponent();
+            bojService = new BojService();
+        }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            User user = await bojService.LoadUser("ghddmsrl100");
+            Debug.WriteLine(user.Id);
+            Debug.WriteLine(user.Rating);
+            Debug.WriteLine(user.Tier);
+
+            List<SolvedProblem> list = user.SolvedProblems;
+            Debug.WriteLine("cnt: " + list.Count);
+            foreach (var item in list) {
+                Debug.Write(item.Name + " " + item.Pid + " " + item.Difficulty + " ");
+                foreach(var s in item.Tags)
+                {
+                    Debug.Write(s + " ");
+                }
+                Debug.WriteLine("");
+            }
+
         }
     }
 }
