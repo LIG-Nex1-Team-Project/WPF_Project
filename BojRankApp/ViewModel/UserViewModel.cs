@@ -27,6 +27,11 @@ namespace BojRankApp.ViewModel
         private string userId = string.Empty;
 
 
+        [ObservableProperty]
+        private User selectedUser;
+
+
+
         public UserViewModel()
         {
             bojService = new BojService();
