@@ -11,7 +11,7 @@
     <Window.DataContext>
         <vm:UserViewModel/>
     </Window.DataContext>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
@@ -33,20 +33,34 @@
 
                 <TextBox Width="200"
                          Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}"/>
-
-                <Button 
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,0">
+                    <Button 
                         Content="추가"
                         Command="{Binding AddUserCommand}"
                         CommandParameter="{Binding UserId}"
                         Width="80"
-                        Margin="0,10,0,20"/>
+                        />
+                <Button Content="전체 갱신" 
+                        Command="{Binding ResetUserCommand}"
+                        Height="20" Width="79"/>
+
+                    <Button 
+                        Content="삭제"
+                        Command="{Binding DelUserCommand}"
+                        CommandParameter="{Binding UserId}"
+                        Width="80"
+                        Margin="0,10,0,20"
+                        />
+                </StackPanel>
+
 
 
                 <TextBlock Text="사용자 목록"
                            FontWeight="Bold"
                            Margin="0,0,0,5"/>
 
-                <ListBox ItemsSource="{Binding Users}">
+                <ListBox ItemsSource="{Binding Users}"
+                         SelectedItem="{Binding SelectedUser}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Border Padding="8"
