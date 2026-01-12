@@ -22,10 +22,13 @@ namespace BojRankApp.ViewModel
         private BojService bojService;
 
         public ObservableCollection<User> Users { get; }
+        public ObservableCollection<SolvedProblem> Problems { get; }
 
         [ObservableProperty]
         private string userId = string.Empty;
 
+        [ObservableProperty]
+        private SUser? selectedSUser; // 통계
 
         [ObservableProperty]
         private User selectedUser;
@@ -34,6 +37,7 @@ namespace BojRankApp.ViewModel
         {
             bojService = new BojService();
             Users = new ObservableCollection<User>();
+            Problems = new ObservableCollection<SolvedProblem>();  
         }
 
         [RelayCommand]
@@ -46,6 +50,7 @@ namespace BojRankApp.ViewModel
                 return;
             }
             Users.Add(user);
+            SelectedUser = user;
         }
 
         [RelayCommand]
@@ -80,13 +85,17 @@ namespace BojRankApp.ViewModel
             }
 
         }
-        // 선택된 사용자의 통계 정보를 담을 속성 추가
-        [ObservableProperty]
-        private SUser? selectedSUser;
-
-        // SelectedUser가 변경될 때마다 호출되는 메서드 (CommunityToolkit.Mvvm이 생성한 partial 메서드 구현)
         partial void OnSelectedUserChanged(User value)
         {
+            Problems.Clear();
+
+            if (value == null) return;
+
+            foreach (var problem in value.SolvedProblems)
+            {
+                Problems.Add(problem);
+            }
+
             if (value != null)
             {
                 // 선택된 사용자를 기반으로 SUser(통계 정보) 생성
@@ -97,5 +106,7 @@ namespace BojRankApp.ViewModel
                 SelectedSUser = null;
             }
         }
+
+        
     }
 }
