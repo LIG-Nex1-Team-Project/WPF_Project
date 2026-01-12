@@ -20,7 +20,7 @@ namespace BojRankApp.Service
         private readonly HttpClient _client = new HttpClient();
         private const string SolvedProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         private const string UserApiPrefix = "https://solved.ac/api/v3/user/show";
-        
+
         public async Task<User> LoadUser(string userId)
         {
             var builder = new UriBuilder(UserApiPrefix);
