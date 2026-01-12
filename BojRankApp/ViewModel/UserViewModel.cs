@@ -58,8 +58,6 @@ namespace BojRankApp.ViewModel
         [RelayCommand]
         public void DelUser()
         {
-            //User user = await bojService.LoadUser(userId);
-            //User target = Users.FirstOrDefault(u => u.Id == user.Id);
             
             if (SelectedUser != null)
             {
