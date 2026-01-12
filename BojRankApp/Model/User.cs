@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BojRankApp.Model
 {
-    class User
+    public class User
     {
         public const string TierImageUrlPrefix = "https://images.weserv.nl/?url=static.solved.ac/tier_small";
         public const string TierImageUrlPostfix = ".svg&output=png";

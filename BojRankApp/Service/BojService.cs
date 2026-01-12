@@ -20,9 +20,10 @@ namespace BojRankApp.Service
         private readonly HttpClient _client = new HttpClient();
         private const string SolvedProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         private const string UserApiPrefix = "https://solved.ac/api/v3/user/show";
-
+        
         public async Task<User> LoadUser(string userId)
         {
+            // JSON 형식으로 변환
             var builder = new UriBuilder(UserApiPrefix);
 
             var query = HttpUtility.ParseQueryString(builder.Query);
@@ -31,22 +32,30 @@ namespace BojRankApp.Service
             builder.Query = query.ToString();
             Uri uri = builder.Uri;
 
-            var json = await _client.GetStringAsync(uri);
-            var node = JsonNode.Parse(json);
+            // Debug.WriteLine(uri.ToString());
+            try
+            {
+                var json = await _client.GetStringAsync(uri); // bad request in Debug
+                var node = JsonNode.Parse(json);
 
-            int tier = node!["tier"]!.GetValue<int>();
-            int rating = node!["rating"]!.GetValue<int>();
-            int solvedCount = node["solvedCount"]!.GetValue<int>();
-            List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId);
+                int tier = node!["tier"]!.GetValue<int>();
+                int rating = node!["rating"]!.GetValue<int>();
+                int solvedCount = node["solvedCount"]!.GetValue<int>();
+                List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId);
 
-            return new User(
-               id: userId,
-               tier: tier,
-               rating: rating,
-               solvedCount: solvedCount,
-               solvedProblems: solvedProblems
-               );
-        }
+                return new User(
+                   id: userId,
+                   tier: tier,
+                   rating: rating,
+                   solvedCount: solvedCount,
+                   solvedProblems: solvedProblems
+                   );
+            }
+            catch(HttpRequestException e)
+            {
+                return null;
+            }
+        } // getURL_User
 
         public async Task<List<SolvedProblem>> LoadSolvedProblem(string userId)
         {
@@ -99,6 +108,8 @@ namespace BojRankApp.Service
             }
 
             return problems;
-        }
+        } // getURL_Problem
+
+        
     }
 }
