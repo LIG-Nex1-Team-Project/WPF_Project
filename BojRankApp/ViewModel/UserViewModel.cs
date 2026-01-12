@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
 
 namespace BojRankApp.ViewModel
 {
@@ -32,12 +33,16 @@ namespace BojRankApp.ViewModel
         }
 
         [RelayCommand]
-        public async Task AddUserCommand(string userId)
+        public async Task AddUser(string userId)
         {
-            if (string.IsNullOrWhiteSpace(UserId))
-                return;
-
             User user = await bojService.LoadUser(userId);
+            // Debug.WriteLine(userId);
+            if (user == null)
+            {
+                MessageBox.Show("사용자를 찾을 수 없습니다.");
+                return;
+            }
+
             Users.Add(user);
         }
 
