@@ -20,7 +20,7 @@ namespace BojRankApp.Service
         private readonly HttpClient _client = new HttpClient();
         private const string SolvedProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         private const string UserApiPrefix = "https://solved.ac/api/v3/user/show";
-        
+        private const string UnSolvedProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         public async Task<User> LoadUser(string userId)
         {
             // JSON 형식으로 변환
@@ -40,15 +40,22 @@ namespace BojRankApp.Service
 
                 int tier = node!["tier"]!.GetValue<int>();
                 int rating = node!["rating"]!.GetValue<int>();
+                
                 int solvedCount = node["solvedCount"]!.GetValue<int>();
+                //int unsolvedCount = node["unsolvedCount"]!.GetValue<int>();
+
                 List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId);
+                List<UnSolvedProblem> unsolvedProblems = await LoadUnSolvedProblem(userId);
+                int unsolvedCount = unsolvedProblems.Count;
 
                 return new User(
                    id: userId,
                    tier: tier,
                    rating: rating,
                    solvedCount: solvedCount,
-                   solvedProblems: solvedProblems
+                   solvedProblems: solvedProblems,
+                   unsolvedCount: unsolvedCount,
+                   unsolvedProblems: unsolvedProblems
                    );
             }
             catch(HttpRequestException e)
@@ -60,7 +67,7 @@ namespace BojRankApp.Service
         public async Task<List<SolvedProblem>> LoadSolvedProblem(string userId)
         {
             var builder = new UriBuilder(SolvedProblemApiPrefix);
-
+            
             var query = HttpUtility.ParseQueryString(builder.Query);
             string encodedQuery = $"s@{userId}";
 
@@ -110,6 +117,59 @@ namespace BojRankApp.Service
             return problems;
         } // getURL_Problem
 
-        
+        public async Task<List<UnSolvedProblem>> LoadUnSolvedProblem(string userId)
+        {
+            var builder = new UriBuilder(UnSolvedProblemApiPrefix);
+
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            string encodedQuery = $"t@{userId} !s@{userId}";
+          
+            query["query"] = encodedQuery;
+            query["sort"] = "level";
+            query["direction"] = "desc";
+
+            builder.Query = query.ToString();
+            Uri uri = builder.Uri;
+
+            var json = await _client.GetStringAsync(uri);
+            var root = JsonNode.Parse(json);
+
+            var problems = new List<UnSolvedProblem>();
+
+            foreach (var item in root["items"]!.AsArray())
+            {
+                int problemId = item!["problemId"]!.GetValue<int>();
+                string titleKo = item["titleKo"]!.GetValue<string>();
+                int level = item["level"]!.GetValue<int>();
+
+                var tags = new List<string>();
+
+                foreach (var tag in item["tags"]!.AsArray())
+                {
+                    var displayNames = tag!["displayNames"]!.AsArray();
+
+                    var koName = displayNames
+                        .FirstOrDefault(d =>
+                            d!["language"]!.GetValue<string>() == "ko"
+                        )?["name"]?.GetValue<string>();
+
+                    if (koName != null)
+                    {
+                        tags.Add(koName);
+                    }
+                }
+
+                problems.Add(new UnSolvedProblem(
+                    pid: problemId,
+                    name: titleKo,
+                    difficulty: level,
+                    tags: tags
+                ));
+            }
+
+            return problems;
+        } // getURL_Problem
+
+
     }
 }
