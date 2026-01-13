@@ -39,10 +39,11 @@ namespace BojRankApp.ViewModel
         public UserViewModel()
         {
             bojService = new BojService();
-            Users = new ObservableCollection<User>();
             Problems = new ObservableCollection<SolvedProblem>();
-            LoadFile();
+            Users = new ObservableCollection<User>();
+            Users = bojService.LoadFile();
         }
+
         [RelayCommand]
         public async Task AddUser(string userId)
         {
@@ -59,9 +60,9 @@ namespace BojRankApp.ViewModel
                 MessageBox.Show("이미 있는 사용자입니다.");
                 return;
             }
-                Users.Add(user);
+            Users.Add(user);
             SelectedUser = user;
-            SaveFile();
+            bojService.SaveFile(Users);
         }
         [RelayCommand]
         public void DelUser()
@@ -73,7 +74,7 @@ namespace BojRankApp.ViewModel
             {
                 Users.Remove(SelectedUser);
             }
-            SaveFile();
+            bojService.SaveFile(Users);
         }
         [RelayCommand]
         public async Task ResetUser()
@@ -94,8 +95,7 @@ namespace BojRankApp.ViewModel
             {
                 Users.Add(u);
             }
-
-            SaveFile();
+            bojService.SaveFile(Users);
         }
         partial void OnSelectedUserChanged(User value)
         {
@@ -120,36 +120,7 @@ namespace BojRankApp.ViewModel
                 SelectedSUser = null;
             }
         }
-        // 저장 
-        public void SaveFile()
-        {
-            string path = "users.txt";
-
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true // 보기 좋게
-            };
-
-            string json = JsonSerializer.Serialize(Users, options);
-            File.WriteAllText(path, json);
-        }
-
-        public void LoadFile()
-        {
-            string path = "users.txt";
-
-            if (!File.Exists(path))
-                return;
-
-            string json = File.ReadAllText(path);
-            var users = JsonSerializer.Deserialize<List<User>>(json);
-
-            Users.Clear();
-            foreach (var user in users)
-            {
-                Users.Add(user);
-            }
-        }
+         
     }
 
 }
