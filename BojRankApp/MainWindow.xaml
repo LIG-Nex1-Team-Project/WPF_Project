@@ -472,7 +472,7 @@
                     
                     <RadioButton Content="해결한 문제"
                                  GroupName="ProblemFilter"
-                                 IsChecked="True"
+                                 IsChecked="{Binding }}"
                                  Margin="0,0,15,0"
                                  FontSize="13"
                                  FontWeight="SemiBold"/>
