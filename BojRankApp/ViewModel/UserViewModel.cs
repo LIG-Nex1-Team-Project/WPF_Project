@@ -43,7 +43,6 @@ namespace BojRankApp.ViewModel
             Problems = new ObservableCollection<SolvedProblem>();
             LoadFile();
         }
-
         [RelayCommand]
         public async Task AddUser(string userId)
         {
@@ -64,7 +63,6 @@ namespace BojRankApp.ViewModel
             SelectedUser = user;
             SaveFile();
         }
-
         [RelayCommand]
         public void DelUser()
         {
@@ -122,7 +120,6 @@ namespace BojRankApp.ViewModel
                 SelectedSUser = null;
             }
         }
-
         // 저장 
         public void SaveFile()
         {
