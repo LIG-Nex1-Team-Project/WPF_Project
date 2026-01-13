@@ -22,12 +22,30 @@ namespace BojRankApp
     {
         private BojService bojService;
 
+
+
         public MainWindow()
         {
             InitializeComponent();
             bojService = new BojService();
         }
+        // MainWindow.xaml.cs 에 추가
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && sender is TextBox tb)
+            {
+                var userId = tb.Text;
 
+                var vm = tb.DataContext;
+                if (vm != null)
+                {
+                    ((dynamic)vm).AddUserCommand.Execute(userId);
+                }
+
+                tb.Text = string.Empty;
+                e.Handled = true;
+            }
+        }
         private void Datagrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataGrid listBox = sender as DataGrid;
@@ -73,9 +91,9 @@ namespace BojRankApp
         {
             throw new NotImplementedException();
         }
-    }
-    // MainWindow.xaml.cs 에 추가
 
+
+    }
     // [수정됨] 숫자(int)와 문자열(string) 모두 처리하는 만능 컨버터
     public class TierColorConverter : IValueConverter
     {
