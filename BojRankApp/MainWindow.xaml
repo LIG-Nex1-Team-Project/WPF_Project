@@ -472,13 +472,14 @@
                     
                     <RadioButton Content="해결한 문제"
                                  GroupName="ProblemFilter"
-                                 IsChecked="{Binding }}"
+                                 IsChecked="{Binding IsSolvedChecked}"
                                  Margin="0,0,15,0"
                                  FontSize="13"
                                  FontWeight="SemiBold"/>
                     
                     <RadioButton Content="시도 중인 문제"
                                  GroupName="ProblemFilter"
+                                 IsChecked="{Binding IsUnsolvedChecked}"
                                  FontSize="13"
                                  FontWeight="SemiBold"/>
                 </StackPanel>
