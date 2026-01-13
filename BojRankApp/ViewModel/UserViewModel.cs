@@ -43,6 +43,12 @@ namespace BojRankApp.ViewModel
         [ObservableProperty]
         private bool isUnsolvedChecked;
 
+        private string _inputUserId;
+        public string InputUserId
+        {
+            get => _inputUserId;
+            set => SetProperty(ref _inputUserId, value);
+        }
 
         public UserViewModel()
         {

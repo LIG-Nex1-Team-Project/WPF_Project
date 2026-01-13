@@ -125,6 +125,7 @@
                                              Foreground="#424242"
                                              Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}"
                                              CaretBrush="#00A896"
+                                             KeyDown="TextBox_KeyDown"
                                              >
 
                                     </TextBox>
