@@ -79,7 +79,7 @@ namespace BojRankApp.Model
                 TagItem temp = new TagItem(item.Key, item.Value, ((double)item.Value / tagcnt * 100));
                 TagItems.Add(temp);
             }
-            return TagItems;
+            return TagItems.OrderByDescending(x => x.TagPercent).ToList();
         }
 
         List<TierItem> LoadTierList(User user)
@@ -100,7 +100,7 @@ namespace BojRankApp.Model
                 TierItem temp = new TierItem(item.Key, item.Value, ((double)item.Value / user.SolvedCount * 100));
                 TierItems.Add(temp);
             }
-            return TierItems;
+            return TierItems.OrderByDescending(x => x.TierPercent).ToList();
         }
 
         string int2string(int tierI)

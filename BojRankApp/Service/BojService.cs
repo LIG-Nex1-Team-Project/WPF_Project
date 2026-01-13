@@ -20,7 +20,9 @@ namespace BojRankApp.Service
         private readonly HttpClient _client = new HttpClient();
         private const string SolvedProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         private const string UserApiPrefix = "https://solved.ac/api/v3/user/show";
-        private const string UnSolvedProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
+        
+        private const int PageElementNum = 50;
+        
         public async Task<User> LoadUser(string userId)
         {
             // JSON 형식으로 변환
@@ -47,6 +49,8 @@ namespace BojRankApp.Service
                 List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId);
                 List<UnSolvedProblem> unsolvedProblems = await LoadUnSolvedProblem(userId);
                 int unsolvedCount = unsolvedProblems.Count;
+                int page = (solvedCount / PageElementNum) + 1;
+                List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId, page);
 
                 return new User(
                    id: userId,
@@ -64,7 +68,7 @@ namespace BojRankApp.Service
             }
         } // getURL_User
 
-        public async Task<List<SolvedProblem>> LoadSolvedProblem(string userId)
+        public async Task<List<SolvedProblem>> LoadSolvedProblem(string userId, int page)
         {
             var builder = new UriBuilder(SolvedProblemApiPrefix);
             
@@ -75,43 +79,49 @@ namespace BojRankApp.Service
             query["sort"] = "level";
             query["direction"] = "desc";
 
-            builder.Query = query.ToString();
-            Uri uri = builder.Uri;
-
-            var json = await _client.GetStringAsync(uri);
-            var root = JsonNode.Parse(json);
-
             var problems = new List<SolvedProblem>();
 
-            foreach (var item in root["items"]!.AsArray())
+            for (int i = 1; i <= page; i++)
             {
-                int problemId = item!["problemId"]!.GetValue<int>();
-                string titleKo = item["titleKo"]!.GetValue<string>();
-                int level = item["level"]!.GetValue<int>();
+                query["page"] = i.ToString();
 
-                var tags = new List<string>();
+                builder.Query = query.ToString();
+                Uri uri = builder.Uri;
 
-                foreach (var tag in item["tags"]!.AsArray())
+                var json = await _client.GetStringAsync(uri);
+                var root = JsonNode.Parse(json);
+                
+
+                foreach (var item in root["items"]!.AsArray())
                 {
-                    var displayNames = tag!["displayNames"]!.AsArray();
+                    int problemId = item!["problemId"]!.GetValue<int>();
+                    string titleKo = item["titleKo"]!.GetValue<string>();
+                    int level = item["level"]!.GetValue<int>();
 
-                    var koName = displayNames
-                        .FirstOrDefault(d =>
-                            d!["language"]!.GetValue<string>() == "ko"
-                        )?["name"]?.GetValue<string>();
+                    var tags = new List<string>();
 
-                    if (koName != null)
+                    foreach (var tag in item["tags"]!.AsArray())
                     {
-                        tags.Add(koName);
-                    }
-                }
+                        var displayNames = tag!["displayNames"]!.AsArray();
 
-                problems.Add(new SolvedProblem(
-                    pid: problemId,
-                    name: titleKo,
-                    difficulty: level,
-                    tags: tags
-                ));
+                        var koName = displayNames
+                            .FirstOrDefault(d =>
+                                d!["language"]!.GetValue<string>() == "ko"
+                            )?["name"]?.GetValue<string>();
+
+                        if (koName != null)
+                        {
+                            tags.Add(koName);
+                        }
+                    }
+
+                    problems.Add(new SolvedProblem(
+                        pid: problemId,
+                        name: titleKo,
+                        difficulty: level,
+                        tags: tags
+                    ));
+                }
             }
 
             return problems;

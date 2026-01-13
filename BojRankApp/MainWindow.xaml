@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:BojRankApp.ViewModel"
         xmlns:local="clr-namespace:BojRankApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="800">
+        Title="BoJRankApp" Height="850" Width="800">
 
     <Window.DataContext>
         <vm:UserViewModel/>
@@ -14,13 +14,16 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="23*" />
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="337*"/>
+            <ColumnDefinition Width="400*" />
         </Grid.ColumnDefinitions>
 
 
         <!-- 왼쪽 위 View-->
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0" Grid.ColumnSpan="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -135,7 +138,8 @@
                                     BorderBrush="#b5b5b5"
                                     Cursor="Hand"
                                     Command="{Binding AddUserCommand}"
-                                    CommandParameter="{Binding UserId}">
+                                    CommandParameter="{Binding UserId}"
+                                    IsDefault="True">
 
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
@@ -287,94 +291,235 @@
                                 </DataGridTextColumn>
                                 
                                 <DataGridTextColumn Header="해결 문제 수" Width="2.5*" 
-                                                    Binding="{Binding SolvedCount}" />
+                                                    Binding="{Binding SolvedCount}"/>
                                 <DataGridTextColumn Header="점수" Width="1.5*" 
-                                                    Binding="{Binding Rating}" />
-
+                                                    Binding="{Binding Rating}"/>
                             </DataGrid.Columns>
-
                         </DataGrid>
-
-
                     </Grid>
-
                 </Grid>
             </Border>
 
             <!-- 왼쪽 아래 View-->
             <Border Grid.Row="1"
-                CornerRadius="12"
-                Padding="20"
-                BorderBrush="#008C75"
-                BorderThickness="0.5, 5, 0.5, 0.5"
-                Margin="50 20 0 30">
+                    CornerRadius="12"
+                    Padding="20"
+                    BorderBrush="#008C75"
+                    BorderThickness="0.5, 5, 0.5, 0.5"
+                    Margin="50 20 0 30">
 
-                <StackPanel>
-                    <TextBlock Text="태그 별 통계 (Top Types)" 
+                <Grid Margin="0,-5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+                               Text="▪️ 유형 별 통계" 
+                               FontWeight="Bold" 
+                               Margin="0,0,0,5"/>
+
+                    <DataGrid Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              ColumnWidth="*"
+                              Background="White"
+                              RowBackground="White"
+                              AlternatingRowBackground="White"
+                              HeadersVisibility="Column"
+                              BorderThickness="0"
+                              ItemsSource="{Binding SelectedSUser.StatisticsTags}"
+                              SelectedItem="{Binding SelectedSUser}"
+                              GridLinesVisibility="None"
+                              VerticalScrollBarVisibility="Auto"
+                              IsReadOnly="True">
+
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Padding" Value="0,0,0,5"/>
+                                <Setter Property="BorderBrush" Value="#919191"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="Margin" Value="0,2,0,2"/>
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#EEEEEE"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E6F7F4"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="유형" Width="2.5*" Binding="{Binding TagName}"/>
+                            <DataGridTextColumn Header="해결" Width="2*" Binding="{Binding TagCount}"/>
+                            <DataGridTextColumn Header="비율" Width="2*" Binding="{Binding TagPercent, StringFormat={}{0:F1}%}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Grid.Row="2" 
+                               Text="▪️ 티어 별 통계" 
                                FontWeight="Bold" 
                                Margin="0,15,0,5"/>
-                    <ListView ItemsSource="{Binding SelectedSUser.StatisticsTags}"
-                              Height="120"
-                              BorderBrush="#DDD" 
-                              BorderThickness="1">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="태그" Width="100" DisplayMemberBinding="{Binding TagName}"/>
-                                <GridViewColumn Header="해결" Width="50" DisplayMemberBinding="{Binding TagCount}"/>
-                                <GridViewColumn Header="비율" Width="60" DisplayMemberBinding="{Binding TagPercent, StringFormat={}{0:F1}%}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
 
-                    <TextBlock Text="티어 별 통계 (Tier Distribution)" 
-                               FontWeight="Bold" 
-                               Margin="0,15,0,5"/>
+                    <DataGrid Grid.Row="3"
+                              AutoGenerateColumns="False"
+                              ColumnWidth="*"
+                              Background="White"
+                              RowBackground="White"
+                              AlternatingRowBackground="White"
+                              HeadersVisibility="Column"
+                              BorderThickness="0"
+                              ItemsSource="{Binding SelectedSUser.StatisticsTiers}"
+                              SelectedItem="{Binding SelectedSUser}" 
+                              GridLinesVisibility="None"
+                              VerticalScrollBarVisibility="Auto"
+                              IsReadOnly="True">
 
-                    <ListView ItemsSource="{Binding SelectedSUser.StatisticsTiers}" 
-                              Height="120" 
-                              BorderBrush="#DDD" 
-                              BorderThickness="1">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="티어" Width="100" DisplayMemberBinding="{Binding TierName}"/>
-                                <GridViewColumn Header="해결" Width="50" DisplayMemberBinding="{Binding TierCount}"/>
-                                <GridViewColumn Header="비율" Width="60" DisplayMemberBinding="{Binding TierPercent, StringFormat={}{0:F1}%}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </StackPanel>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Padding" Value="0,0,0,5"/>
+                                <Setter Property="BorderBrush" Value="#919191"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
 
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="Margin" Value="0,2,0,2"/>
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#EEEEEE"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E6F7F4"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="티어" Width="2.5*" Binding="{Binding TierName}"/>
+                            <DataGridTextColumn Header="해결" Width="2*" Binding="{Binding TierCount}"/>
+                            <DataGridTextColumn Header="비율" Width="2*" Binding="{Binding TierPercent, StringFormat={}{0:F1}%}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </Border>
-
         </Grid>
 
 
         <!-- 오른쪽 View-->
-        <Border Grid.Column="1"
-                Padding="16"
-                BorderBrush="LightGray"
-                BorderThickness="0,0,1,0">
-
+        <Border Grid.Column="4"
+                CornerRadius="12"
+                
+                BorderBrush="#0089D0"
+                BorderThickness="0.5, 5, 0.5, 0.5"
+                Margin="20 20 45 30">
+            
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- 제목 -->
-                <TextBlock Grid.Row="0"
-                           Text="해결한 문제들"
-                           FontWeight="Bold"
-                           Margin="0,0,0,8"/>
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            Margin="15,15,15,5">
+
+                    <Border Width="22"
+                            Height="22"
+                            CornerRadius="6"
+                            Background="#ebebeb"
+                            VerticalAlignment="Center">
+                        
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   Text="&#xEDE3;"
+                                   FontSize="15"
+                                   FontWeight="Light"
+                                   Foreground="#000000"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    
+                    <TextBlock Text="메뉴 선택"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="5, 0, 0, 0"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                            Margin="15,6,15,5">
+                    
+                    <RadioButton Content="해결한 문제"
+                                 GroupName="ProblemFilter"
+                                 IsChecked="True"
+                                 Margin="0,0,15,0"
+                                 FontSize="13"
+                                 FontWeight="SemiBold"/>
+                    
+                    <RadioButton Content="시도 중인 문제"
+                                 GroupName="ProblemFilter"
+                                 FontSize="13"
+                                 FontWeight="SemiBold"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"                            
+                            VerticalAlignment="Top"
+                            Margin="15">
+
+                    <Border Width="22"
+                            Height="22"
+                            CornerRadius="6"
+                            Background="#E6F4FB"
+                            VerticalAlignment="Center">
+
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   Text="&#xE73A;"
+                                   FontSize="13"
+                                   FontWeight="ExtraBold"
+                                   Foreground="#46AADD"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <TextBlock Text="문제 리스트"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Margin="5, 0, 0, 0"/>
+                </StackPanel>
 
                 <!-- 문제 목록 -->
-                <ListBox Grid.Row="1"
+                <ListBox Grid.Row="3"
                          ItemsSource="{Binding Problems}"
+                         MouseDoubleClick="ListBox_MouseDoubleClick"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          VirtualizingPanel.IsVirtualizing="True"
                          VirtualizingPanel.VirtualizationMode="Recycling"
-                         ScrollViewer.CanContentScroll="True">
+                         ScrollViewer.CanContentScroll="True"
+                         Margin="15 0 15 10">
 
                     <ListBox.ItemTemplate>
                         <DataTemplate>
