@@ -275,7 +275,9 @@
                                 <DataGridTextColumn Header="해결 문제 수" Width="2.5*" 
                                                     Binding="{Binding SolvedCount}"/>
                                 <DataGridTextColumn Header="점수" Width="1.5*" 
-                                                    Binding="{Binding Rating}"/>
+                                                    Binding="{Binding Rating}" />
+                                
+
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
