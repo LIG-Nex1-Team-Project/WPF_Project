@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.IO;
+using System.Text.Json;
+
 
 namespace BojRankApp.ViewModel
 {
@@ -22,8 +25,9 @@ namespace BojRankApp.ViewModel
         private BojService bojService;
 
         public ObservableCollection<User> Users { get; }
-        public ObservableCollection<SolvedProblem> Problems { get; }
 
+        public ObservableCollection<Problem> Problems { get; }
+        
         [ObservableProperty]
         private string userId = string.Empty;
 
@@ -33,33 +37,42 @@ namespace BojRankApp.ViewModel
         [ObservableProperty]
         private User selectedUser;
 
+        [ObservableProperty]
+        private bool isSolvedChecked = true;
+
+        [ObservableProperty]
+        private bool isUnsolvedChecked;
+
+
         public UserViewModel()
         {
             bojService = new BojService();
-            Users = new ObservableCollection<User>();
-            Problems = new ObservableCollection<SolvedProblem>();  
+            Problems = new ObservableCollection<Problem>();
+            Users = bojService.LoadFile();
         }
 
         [RelayCommand]
         public async Task AddUser(string userId)
         {
-            User user = await bojService.LoadUser(userId);
-            var target = Users.FirstOrDefault(u => u.Id == userId);
 
+            var target = Users.FirstOrDefault(u => u.Id == userId);
+            if (target != null)
+            {
+                MessageBox.Show("이미 존재하는 사용자입니다.");
+                return;
+            }
+
+            User user = await bojService.LoadUser(userId);
             if (user == null)
             {
                 MessageBox.Show("사용자를 찾을 수 없습니다.");
                 return;
             }
-            else if(target != null)
-            {
-                MessageBox.Show("이미 있는 사용자입니다.");
-                return;
-            }
-                Users.Add(user);
-            SelectedUser = user;
-        }
 
+            Users.Add(user);
+            SelectedUser = user;
+            bojService.SaveFile(Users);
+        }
         [RelayCommand]
         public void DelUser()
         {
@@ -70,6 +83,7 @@ namespace BojRankApp.ViewModel
             {
                 Users.Remove(SelectedUser);
             }
+            bojService.SaveFile(Users);
         }
         [RelayCommand]
         public async Task ResetUser()
@@ -90,10 +104,11 @@ namespace BojRankApp.ViewModel
             {
                 Users.Add(u);
             }
-
+            bojService.SaveFile(Users);
         }
         partial void OnSelectedUserChanged(User value)
         {
+
             Problems.Clear();
 
             if (value == null) return;
@@ -115,5 +130,37 @@ namespace BojRankApp.ViewModel
                 SelectedSUser = null;
             }
         }
+
+        private void RefreshProblems()
+        {
+            Problems.Clear();
+
+            if (SelectedUser == null) return;
+
+            if (IsSolvedChecked)
+            {
+                foreach (var p in SelectedUser.SolvedProblems)
+                    Problems.Add(p);
+            }
+
+            if (IsUnsolvedChecked)
+            {
+                foreach (var p in SelectedUser.UnSolvedProblems)
+                    Problems.Add(p);
+            }
+        }
+
+        partial void OnIsSolvedCheckedChanged(bool value)
+        {
+            RefreshProblems();
+        }
+
+        partial void OnIsUnsolvedCheckedChanged(bool value)
+        {
+            RefreshProblems();
+        }
+
+
     }
+
 }

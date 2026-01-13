@@ -273,14 +273,34 @@
                             </DataGrid.RowStyle>
 
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="티어" Width="1*" 
-                                                    Binding="{Binding Tier}"/>
-                                <DataGridTextColumn Header="유저 ID" Width="2.3*"
-                                                    Binding="{Binding Id}"/>
+                                <DataGridTemplateColumn Width="30">
+                                    
+                                    <DataGridTemplateColumn.Header>
+                                        <TextBlock Text="티어" Margin="5,0,0,0"/>
+                                    </DataGridTemplateColumn.Header>
+                                    
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding TierImageUrl}"
+                                                    Height="18"
+                                                    Stretch="Uniform"
+                                                   />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Width="2.3*" Binding="{Binding Id}">
+                                    <DataGridTextColumn.Header>
+                                        <TextBlock Text="유저 ID" Margin="5,0,0,0"/>
+                                    </DataGridTextColumn.Header>
+                                </DataGridTextColumn>
+                                
                                 <DataGridTextColumn Header="해결 문제 수" Width="2.5*" 
                                                     Binding="{Binding SolvedCount}"/>
                                 <DataGridTextColumn Header="점수" Width="1.5*" 
-                                                    Binding="{Binding Rating}"/>
+                                                    Binding="{Binding Rating}" />
+                                
+
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -603,13 +623,14 @@
 
                     <RadioButton Content="해결한 문제"
                                  GroupName="ProblemFilter"
-                                 IsChecked="True"
+                                 IsChecked="{Binding IsSolvedChecked}"
                                  Margin="0,0,15,0"
                                  FontSize="13"
                                  FontWeight="SemiBold"/>
 
                     <RadioButton Content="시도 중인 문제"
                                  GroupName="ProblemFilter"
+                                 IsChecked="{Binding IsUnsolvedChecked}"
                                  FontSize="13"
                                  FontWeight="SemiBold"/>
                 </StackPanel>
