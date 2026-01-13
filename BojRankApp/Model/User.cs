@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,6 @@ namespace BojRankApp.Model
         public string TierImageUrl { get { return $"{TierImageUrlPrefix}/{Tier}{TierImageUrlPostfix}"; } }
         public int Rating{ get; set; }
         public int SolvedCount { get; set; }
-        public string Memo { get; set; }
         public List<SolvedProblem>? SolvedProblems { get; set; }
 
         public User(
@@ -31,7 +31,6 @@ namespace BojRankApp.Model
             Rating = rating;
             SolvedCount = solvedCount;
             SolvedProblems = solvedProblems;
-            Memo = "";
         }
     }
 }
