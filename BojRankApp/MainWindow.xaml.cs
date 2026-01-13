@@ -46,5 +46,20 @@ namespace BojRankApp
             }
 
         }
+        private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+
+            if (listBox != null && listBox.SelectedItem is SolvedProblem problem)
+            {
+                string url = $"https://www.acmicpc.net/problem/{problem.Pid}";
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+        }
     }
 }

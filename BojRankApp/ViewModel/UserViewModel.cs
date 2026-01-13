@@ -113,7 +113,9 @@ namespace BojRankApp.ViewModel
             if (value != null)
             {
                 // 선택된 사용자를 기반으로 SUser(통계 정보) 생성
+                
                 SelectedSUser = new SUser(value);
+                //Debug.WriteLine(SelectedSUser.StatisticsTags);
             }
             else
             {

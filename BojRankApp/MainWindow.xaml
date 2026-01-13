@@ -269,115 +269,140 @@
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="티어" Width="1*" 
-                                                    Binding="{Binding Tier}" />
+                                                    Binding="{Binding Tier}"/>
                                 <DataGridTextColumn Header="유저 ID" Width="2.3*"
-                                                    Binding="{Binding Id}" />
+                                                    Binding="{Binding Id}"/>
                                 <DataGridTextColumn Header="해결 문제 수" Width="2.5*" 
-                                                    Binding="{Binding SolvedCount}" />
+                                                    Binding="{Binding SolvedCount}"/>
                                 <DataGridTextColumn Header="점수" Width="1.5*" 
-                                                    Binding="{Binding Rating}" />
-
+                                                    Binding="{Binding Rating}"/>
                             </DataGrid.Columns>
-
                         </DataGrid>
-
-
                     </Grid>
-
                 </Grid>
             </Border>
 
             <!-- 왼쪽 아래 View-->
             <Border Grid.Row="1"
-                CornerRadius="12"
-                Padding="20"
-                BorderBrush="#008C75"
-                BorderThickness="0.5, 5, 0.5, 0.5"
-                Margin="50 20 0 30">
+                    CornerRadius="12"
+                    Padding="20"
+                    BorderBrush="#008C75"
+                    BorderThickness="0.5, 5, 0.5, 0.5"
+                    Margin="50 20 0 30">
 
-                <StackPanel Margin="0,-15,0,-13">
-                    <TextBlock Text="태그 별 통계" 
-               FontWeight="Bold" 
-               Margin="0,15,0,5"/>
+                <Grid Margin="0,-5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                    <ListView ItemsSource="{Binding SelectedSUser.StatisticsTags}"
-              Height="120"
-              BorderBrush="#DDD" 
-              BorderThickness="1">
+                    <TextBlock Grid.Row="0" 
+                               Text="▪️ 유형 별 통계" 
+                               FontWeight="Bold" 
+                               Margin="0,0,0,5"/>
 
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <DataGrid Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              ColumnWidth="*"
+                              Background="White"
+                              RowBackground="White"
+                              AlternatingRowBackground="White"
+                              HeadersVisibility="Column"
+                              BorderThickness="0"
+                              ItemsSource="{Binding SelectedSUser.StatisticsTags}"
+                              SelectedItem="{Binding SelectedSUser}"
+                              GridLinesVisibility="None"
+                              VerticalScrollBarVisibility="Auto"
+                              IsReadOnly="True">
+
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Padding" Value="0,0,0,5"/>
+                                <Setter Property="BorderBrush" Value="#919191"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
                             </Style>
-                        </ListView.ItemContainerStyle>
+                        </DataGrid.ColumnHeaderStyle>
 
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="유형" Width="100" DisplayMemberBinding="{Binding TagName}"/>
-
-                                <GridViewColumn Header="해결" Width="50">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding TagCount}" 
-                                       TextAlignment="Center"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-
-                                <GridViewColumn Header="비율" Width="60">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding TagPercent, StringFormat={}{0:F1}%}" 
-                                       TextAlignment="Center"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-
-                    <TextBlock Text="티어 별 통계" 
-               FontWeight="Bold" 
-               Margin="0,15,0,5"/>
-                    <ListView ItemsSource="{Binding SelectedSUser.StatisticsTiers}" 
-              Height="81" 
-              BorderBrush="#DDD" 
-              BorderThickness="1">
-
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="Margin" Value="0,2,0,2"/>
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#EEEEEE"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E6F7F4"/>
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
-                        </ListView.ItemContainerStyle>
+                        </DataGrid.RowStyle>
 
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="티어" Width="100" DisplayMemberBinding="{Binding TierName}"/>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="유형" Width="2.5*" Binding="{Binding TagName}"/>
+                            <DataGridTextColumn Header="해결" Width="2*" Binding="{Binding TagCount}"/>
+                            <DataGridTextColumn Header="비율" Width="2*" Binding="{Binding TagPercent, StringFormat={}{0:F1}%}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-                                <GridViewColumn Header="해결" Width="50">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding TierCount}" 
-                                       TextAlignment="Center"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                    <TextBlock Grid.Row="2" 
+                               Text="▪️ 티어 별 통계" 
+                               FontWeight="Bold" 
+                               Margin="0,15,0,5"/>
 
-                                <GridViewColumn Header="비율" Width="60">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding TierPercent, StringFormat=\{0:F1\}%}" 
-                                       TextAlignment="Center"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </StackPanel>
+                    <DataGrid Grid.Row="3"
+                              AutoGenerateColumns="False"
+                              ColumnWidth="*"
+                              Background="White"
+                              RowBackground="White"
+                              AlternatingRowBackground="White"
+                              HeadersVisibility="Column"
+                              BorderThickness="0"
+                              ItemsSource="{Binding SelectedSUser.StatisticsTiers}"
+                              SelectedItem="{Binding SelectedSUser}" 
+                              GridLinesVisibility="None"
+                              VerticalScrollBarVisibility="Auto"
+                              IsReadOnly="True">
 
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Padding" Value="0,0,0,5"/>
+                                <Setter Property="BorderBrush" Value="#919191"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="Margin" Value="0,2,0,2"/>
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="BorderBrush" Value="#EEEEEE"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E6F7F4"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="티어" Width="2.5*" Binding="{Binding TierName}"/>
+                            <DataGridTextColumn Header="해결" Width="2*" Binding="{Binding TierCount}"/>
+                            <DataGridTextColumn Header="비율" Width="2*" Binding="{Binding TierPercent, StringFormat={}{0:F1}%}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </Border>
-
         </Grid>
 
 
@@ -402,6 +427,7 @@
                 <!-- 문제 목록 -->
                 <ListBox Grid.Row="1"
                          ItemsSource="{Binding Problems}"
+                         MouseDoubleClick="ListBox_MouseDoubleClick"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          VirtualizingPanel.IsVirtualizing="True"
