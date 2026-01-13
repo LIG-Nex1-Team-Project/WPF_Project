@@ -1,11 +1,14 @@
 ﻿using BojRankApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -16,13 +19,17 @@ namespace BojRankApp.Service
 {
     internal class BojService
     {
-
+        public ObservableCollection<User> Users { get; }
         private readonly HttpClient _client = new HttpClient();
         private const string ProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         private const string UserApiPrefix = "https://solved.ac/api/v3/user/show";
         
         private const int PageElementNum = 50;
         
+        public BojService()
+        {
+                Users = new ObservableCollection<User>();
+        }
         public async Task<User> LoadUser(string userId)
         {
             // JSON 형식으로 변환
@@ -180,6 +187,36 @@ namespace BojRankApp.Service
             return problems;
         } // getURL_Problem
 
+        public void SaveFile(ObservableCollection<User> users)
+        {
+            string path = "users.txt";
 
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true // 보기 좋게
+            };
+
+            string json = JsonSerializer.Serialize(users, options);
+            File.WriteAllText(path, json);
+        }
+
+        public ObservableCollection<User> LoadFile()
+        {
+            string path = "users.txt";
+            
+            if (!File.Exists(path))
+                return null;
+
+            string json = File.ReadAllText(path);
+            var users = JsonSerializer.Deserialize<List<User>>(json);
+
+           
+            Users.Clear();
+            foreach (var user in users)
+            {
+                Users.Add(user);
+            }
+            return Users;
+        }
     }
 }

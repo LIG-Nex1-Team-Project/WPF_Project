@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.IO;
+using System.Text.Json;
+
 
 namespace BojRankApp.ViewModel
 {
@@ -40,8 +43,7 @@ namespace BojRankApp.ViewModel
         {
             bojService = new BojService();
             Users = new ObservableCollection<User>();
-            Problems = new ObservableCollection<SolvedProblem>();  // 1번
-            UnSolvedProblems = new ObservableCollection<UnSolvedProblem> { }; 
+            Problems = new ObservableCollection<SolvedProblem>();  
         }
 
         [RelayCommand]
@@ -60,10 +62,10 @@ namespace BojRankApp.ViewModel
                 MessageBox.Show("이미 있는 사용자입니다.");
                 return;
             }
-                Users.Add(user);
+            Users.Add(user);
             SelectedUser = user;
+            bojService.SaveFile(Users);
         }
-
         [RelayCommand]
         public void DelUser()
         {
@@ -74,6 +76,7 @@ namespace BojRankApp.ViewModel
             {
                 Users.Remove(SelectedUser);
             }
+            bojService.SaveFile(Users);
         }
         [RelayCommand]
         public async Task ResetUser()
@@ -94,7 +97,7 @@ namespace BojRankApp.ViewModel
             {
                 Users.Add(u);
             }
-
+            bojService.SaveFile(Users);
         }
         partial void OnSelectedUserChanged(User value)
         {
@@ -123,5 +126,7 @@ namespace BojRankApp.ViewModel
                 SelectedSUser = null;
             }
         }
+         
     }
+
 }
