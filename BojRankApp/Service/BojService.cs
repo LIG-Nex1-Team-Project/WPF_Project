@@ -18,7 +18,7 @@ namespace BojRankApp.Service
     {
 
         private readonly HttpClient _client = new HttpClient();
-        private const string SolvedProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
+        private const string ProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         private const string UserApiPrefix = "https://solved.ac/api/v3/user/show";
         
         private const int PageElementNum = 50;
@@ -45,12 +45,12 @@ namespace BojRankApp.Service
                 
                 int solvedCount = node["solvedCount"]!.GetValue<int>();
                 //int unsolvedCount = node["unsolvedCount"]!.GetValue<int>();
+                
+                int page = (solvedCount / PageElementNum) + 1;
 
-                List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId);
+                List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId, page);
                 List<UnSolvedProblem> unsolvedProblems = await LoadUnSolvedProblem(userId);
                 int unsolvedCount = unsolvedProblems.Count;
-                int page = (solvedCount / PageElementNum) + 1;
-                List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId, page);
 
                 return new User(
                    id: userId,
@@ -70,7 +70,7 @@ namespace BojRankApp.Service
 
         public async Task<List<SolvedProblem>> LoadSolvedProblem(string userId, int page)
         {
-            var builder = new UriBuilder(SolvedProblemApiPrefix);
+            var builder = new UriBuilder(ProblemApiPrefix);
             
             var query = HttpUtility.ParseQueryString(builder.Query);
             string encodedQuery = $"s@{userId}";
@@ -129,7 +129,7 @@ namespace BojRankApp.Service
 
         public async Task<List<UnSolvedProblem>> LoadUnSolvedProblem(string userId)
         {
-            var builder = new UriBuilder(UnSolvedProblemApiPrefix);
+            var builder = new UriBuilder(ProblemApiPrefix);
 
             var query = HttpUtility.ParseQueryString(builder.Query);
             string encodedQuery = $"t@{userId} !s@{userId}";
