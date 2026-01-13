@@ -13,9 +13,13 @@ namespace BojRankApp.Model
 {
     public class Problem
     {
+        public const string TierImageUrlPrefix = "https://images.weserv.nl/?url=static.solved.ac/tier_small";
+        public const string TierImageUrlPostfix = ".svg&output=png";
         public int Pid { get; set; }
         public string? Name { get; set; }
         public int Difficulty { get; set; }
+        public string TierImageUrl { get { return $"{TierImageUrlPrefix}/{Difficulty}{TierImageUrlPostfix}"; } }
+
         public List<string>? Tags { get; set; }
     }
 }

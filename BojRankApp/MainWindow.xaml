@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:BojRankApp.ViewModel"
         xmlns:local="clr-namespace:BojRankApp"
         mc:Ignorable="d"
-        Title="BoJRankApp" Height="850" Width="800">
+        Title="BoJRankApp" Height="850" Width="1100">
 
     <Window.Resources>
         <local:TagColorConverter x:Key="TagColorConverter"/>
@@ -285,8 +285,8 @@
                                         <DataTemplate>
                                             <Grid HorizontalAlignment="Center">
                                                 <Image Source="{Binding TierImageUrl}"
-                               Height="18"
-                               Stretch="Uniform"/>
+                                                       Height="18"
+                                                       Stretch="Uniform"/>
                                             </Grid>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -706,37 +706,143 @@
                                Margin="5, 0, 0, 0"/>
                 </StackPanel>
 
+                
+                
                 <!-- 문제 목록 -->
-                <ListBox Grid.Row="3"
-                         ItemsSource="{Binding Problems}"
-                         MouseDoubleClick="ListBox_MouseDoubleClick"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         VirtualizingPanel.IsVirtualizing="True"
-                         VirtualizingPanel.VirtualizationMode="Recycling"
-                         ScrollViewer.CanContentScroll="True"
-                         Margin="15 0 15 10">
+                <DataGrid Grid.Row="3"
+                          AutoGenerateColumns="False"
+                          ColumnWidth="*"
+                          Background="White"
+                          RowBackground="White"
+                          AlternatingRowBackground="White"
+                          HeadersVisibility="Column"
+                          BorderThickness="0"
+                          ItemsSource="{Binding Problems}"
+                          GridLinesVisibility="None"
+                          VerticalScrollBarVisibility="Auto"
+                          IsReadOnly="True"
+                          MouseDoubleClick="Datagrid_MouseDoubleClick"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Recycling"
+                          ScrollViewer.CanContentScroll="True"
+                          Margin="18  0 35 10">
 
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border Padding="8"
-                                    Margin="0,0,0,6"
-                                    BorderBrush="#DDD"
-                                    BorderThickness="1"
-                                    CornerRadius="4">
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Pid}"
-                                               FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding Difficulty}"
-                                               FontWeight="SemiBold"/>
-                                    <TextBlock Text="{Binding Name}"
-                                               FontSize="12"
-                                               Foreground="Gray"/>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Padding" Value="0,0,0,5"/>
+                            <Setter Property="BorderBrush" Value="#919191"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="Margin" Value="0,2,0,2"/>
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#E6F7F4"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+
+                        <DataGridTemplateColumn Header="티어" Width="0.4*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Center">
+                                        <Image Source="{Binding TierImageUrl}"
+Height="18"
+Stretch="Uniform"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+
+                            <!--
+                            <DataGridTemplateColumn Header="티어" Width="1.2*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Center">
+                                            <Image Source="{Binding TierImageUrl}"
+                       Height="18"
+                       Stretch="Uniform"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            -->
+                            <!--
+                            <DataGridTemplateColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTemplateColumn.ElementStyle> -->
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="문제 번호" Width="1.2*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Center">
+                                        <Border BorderThickness="1"
+                                                CornerRadius="10"
+                                                Padding="10, 2"
+                                                Margin="2">
+                                            
+                                            <Border.Background>
+                                                <Binding Path="TagName" 
+                                                         Converter="{StaticResource TagColorConverter}" 
+                                                         ConverterParameter="Back"/>
+                                            </Border.Background>
+                                            
+                                            <Border.BorderBrush>
+                                                <Binding Path="TagName" 
+                                                         Converter="{StaticResource TagColorConverter}" 
+                                                         ConverterParameter="Fore"/>
+                                            </Border.BorderBrush>
+                                            
+                                            <TextBlock Text="{Binding Pid}"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="12"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center">
+                                                <TextBlock.Foreground>
+                                                    <Binding Path="TagName" 
+                                                             Converter="{StaticResource TagColorConverter}" 
+                                                             ConverterParameter="Fore"/>
+                                                </TextBlock.Foreground>
+                                            </TextBlock>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="이름" Width="3*" Binding="{Binding Name}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        
+
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                
             </Grid>
         </Border>
 
