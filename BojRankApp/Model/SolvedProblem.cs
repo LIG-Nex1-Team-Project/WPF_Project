@@ -21,4 +21,22 @@ namespace BojRankApp.Model
             Tags = tags;
         }
     }
+
+    public class UnSolvedProblem
+    {
+        public int Pid { get; set; }
+        public string? Name { get; set; }
+        public int Difficulty { get; set; }
+        public List<string>? Tags { get; set; }
+
+        public UnSolvedProblem(int pid, string? name, int difficulty, List<string>? tags)
+        {
+            Pid = pid;
+            Name = name;
+            Difficulty = difficulty;
+            Tags = tags;
+        }
+    }
+
+
 }
