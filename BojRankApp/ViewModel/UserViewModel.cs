@@ -22,8 +22,8 @@ namespace BojRankApp.ViewModel
         private BojService bojService;
 
         public ObservableCollection<User> Users { get; }
-        public ObservableCollection<SolvedProblem> Problems { get; }
-
+        //public ObservableCollection<SolvedProblem> Problems { get; }
+        public ObservableCollection<UnSolvedProblem> Problems { get; }
         [ObservableProperty]
         private string userId = string.Empty;
 
@@ -37,7 +37,7 @@ namespace BojRankApp.ViewModel
         {
             bojService = new BojService();
             Users = new ObservableCollection<User>();
-            Problems = new ObservableCollection<SolvedProblem>();  
+            Problems = new ObservableCollection<UnSolvedProblem>();  // 1번
         }
 
         [RelayCommand]
@@ -89,9 +89,13 @@ namespace BojRankApp.ViewModel
         {
             Problems.Clear();
 
+            if (SelectedUser == null) return;
+
+            Problems.Clear();
+
             if (value == null) return;
 
-            foreach (var problem in value.SolvedProblems)
+            foreach (var problem in value.UnSolvedProblems) // 2번
             {
                 Problems.Add(problem);
             }
