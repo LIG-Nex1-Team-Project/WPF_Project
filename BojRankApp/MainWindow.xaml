@@ -135,7 +135,8 @@
                                     BorderBrush="#b5b5b5"
                                     Cursor="Hand"
                                     Command="{Binding AddUserCommand}"
-                                    CommandParameter="{Binding UserId}">
+                                    CommandParameter="{Binding UserId}"
+                                    IsDefault="True">
 
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
