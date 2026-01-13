@@ -233,16 +233,17 @@
 
                     <Grid Grid.Row="1" Margin="10 20 0 0">
                         <DataGrid AutoGenerateColumns="False"
-                                  ColumnWidth="*"
-                                  Background="White"
-                                  RowBackground="White"
-                                  AlternatingRowBackground="White"
-                                  HeadersVisibility="Column"
-                                  BorderThickness="0"
-                                  ItemsSource="{Binding Users}"
-                                  SelectedItem="{Binding SelectedUser}" Margin="0 0 0 1"
-                                  GridLinesVisibility="None" IsReadOnly="True">
-
+          ColumnWidth="*"
+          Background="White"
+          RowBackground="White"
+          AlternatingRowBackground="White"
+          HeadersVisibility="Column"
+          BorderThickness="0"
+          ItemsSource="{Binding Users}"
+          SelectedItem="{Binding SelectedUser}" 
+          Margin="0 0 0 1"
+          GridLinesVisibility="None"
+          IsReadOnly="True">
 
                             <DataGrid.ColumnHeaderStyle>
                                 <Style TargetType="DataGridColumnHeader">
@@ -250,9 +251,9 @@
                                     <Setter Property="Padding" Value="0 0 0 5"/>
                                     <Setter Property="BorderBrush" Value="#919191"/>
                                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
                                     <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
                                 </Style>
                             </DataGrid.ColumnHeaderStyle>
 
@@ -262,44 +263,79 @@
                                     <Setter Property="Margin" Value="0 2 0 2"/>
                                     <Setter Property="Background" Value="White"/>
                                     <Setter Property="BorderBrush" Value="#EEEEEE"/>
-
                                     <Style.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="#00d463"/>
+                                            <Setter Property="Background" Value="#E6F7F4"/>
                                         </Trigger>
                                     </Style.Triggers>
-
                                 </Style>
                             </DataGrid.RowStyle>
 
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Width="30">
-                                    
-                                    <DataGridTemplateColumn.Header>
-                                        <TextBlock Text="티어" Margin="5,0,0,0"/>
-                                    </DataGridTemplateColumn.Header>
-                                    
+                                <DataGridTemplateColumn Header="티어" Width="1.2*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Source="{Binding TierImageUrl}"
-                                                    Height="18"
-                                                    Stretch="Uniform"
-                                                   />
+                                            <Grid HorizontalAlignment="Center">
+                                                <Image Source="{Binding TierImageUrl}"
+                               Height="18"
+                               Stretch="Uniform"/>
+                                            </Grid>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
-                                <DataGridTextColumn Width="2.3*" Binding="{Binding Id}">
-                                    <DataGridTextColumn.Header>
-                                        <TextBlock Text="유저 ID" Margin="5,0,0,0"/>
-                                    </DataGridTextColumn.Header>
+                                <DataGridTemplateColumn Header="유저 ID" Width="2.3*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid HorizontalAlignment="Center">
+                                                <Border BorderThickness="1"
+                                CornerRadius="10"
+                                Padding="10, 2"
+                                Margin="2">
+                                                    <Border.Background>
+                                                        <Binding Path="Tier" 
+                                         Converter="{StaticResource TierColorConverter}" 
+                                         ConverterParameter="Back"/>
+                                                    </Border.Background>
+                                                    <Border.BorderBrush>
+                                                        <Binding Path="Tier" 
+                                         Converter="{StaticResource TierColorConverter}" 
+                                         ConverterParameter="Fore"/>
+                                                    </Border.BorderBrush>
+                                                    <TextBlock Text="{Binding Id}"
+                                       FontWeight="Bold"
+                                       FontSize="12"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center">
+                                                        <TextBlock.Foreground>
+                                                            <Binding Path="Tier" 
+                                             Converter="{StaticResource TierColorConverter}" 
+                                             ConverterParameter="Fore"/>
+                                                        </TextBlock.Foreground>
+                                                    </TextBlock>
+                                                </Border>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="해결 문제 수" Width="2.5*" Binding="{Binding SolvedCount}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                
-                                <DataGridTextColumn Header="해결 문제 수" Width="2.5*" 
-                                                    Binding="{Binding SolvedCount}"/>
-                                <DataGridTextColumn Header="점수" Width="1.5*" 
-                                                    Binding="{Binding Rating}" />
-                                
+
+                                <DataGridTextColumn Header="점수" Width="1.5*" Binding="{Binding Rating}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
 
                             </DataGrid.Columns>
                         </DataGrid>
