@@ -44,11 +44,19 @@ namespace BojRankApp.ViewModel
         public async Task AddUser(string userId)
         {
             User user = await bojService.LoadUser(userId);
+            var target = Users.FirstOrDefault(u => u.Id == userId);
+
             if (user == null)
             {
                 MessageBox.Show("사용자를 찾을 수 없습니다.");
                 return;
             }
+            else if(target != null)
+            {
+                MessageBox.Show("이미 있는 사용자입니다.");
+                return;
+            }
+
             Users.Add(user);
             SelectedUser = user;
         }
