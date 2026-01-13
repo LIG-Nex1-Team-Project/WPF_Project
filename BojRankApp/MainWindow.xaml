@@ -276,8 +276,7 @@
                                                     Binding="{Binding SolvedCount}"/>
                                 <DataGridTextColumn Header="점수" Width="1.5*" 
                                                     Binding="{Binding Rating}" />
-                                <DataGridTextColumn Header="메모" Width="2.3*"
-                                  />
+                                
 
                             </DataGrid.Columns>
                         </DataGrid>
