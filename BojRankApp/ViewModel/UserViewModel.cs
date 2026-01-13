@@ -47,26 +47,28 @@ namespace BojRankApp.ViewModel
         public UserViewModel()
         {
             bojService = new BojService();
-            Users = new ObservableCollection<User>();
             Problems = new ObservableCollection<Problem>();
+            Users = bojService.LoadFile();
         }
 
         [RelayCommand]
         public async Task AddUser(string userId)
         {
-            User user = await bojService.LoadUser(userId);
-            var target = Users.FirstOrDefault(u => u.Id == userId);
 
+            var target = Users.FirstOrDefault(u => u.Id == userId);
+            if (target != null)
+            {
+                MessageBox.Show("이미 존재하는 사용자입니다.");
+                return;
+            }
+
+            User user = await bojService.LoadUser(userId);
             if (user == null)
             {
                 MessageBox.Show("사용자를 찾을 수 없습니다.");
                 return;
             }
-            else if(target != null)
-            {
-                MessageBox.Show("이미 있는 사용자입니다.");
-                return;
-            }
+
             Users.Add(user);
             SelectedUser = user;
             bojService.SaveFile(Users);

@@ -205,7 +205,7 @@ namespace BojRankApp.Service
             string path = "users.txt";
             
             if (!File.Exists(path))
-                return null;
+                return new ObservableCollection<User>();
 
             string json = File.ReadAllText(path);
             var users = JsonSerializer.Deserialize<List<User>>(json);
