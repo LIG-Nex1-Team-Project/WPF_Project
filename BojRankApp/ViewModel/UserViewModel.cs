@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.IO;
+using System.Text.Json;
+
 
 namespace BojRankApp.ViewModel
 {
@@ -21,7 +24,7 @@ namespace BojRankApp.ViewModel
 
         private BojService bojService;
 
-        public ObservableCollection<User> Users { get; }
+        public ObservableCollection<User> Users { get; } 
         public ObservableCollection<SolvedProblem> Problems { get; }
 
         [ObservableProperty]
@@ -37,7 +40,8 @@ namespace BojRankApp.ViewModel
         {
             bojService = new BojService();
             Users = new ObservableCollection<User>();
-            Problems = new ObservableCollection<SolvedProblem>();  
+            Problems = new ObservableCollection<SolvedProblem>();
+            LoadFile();
         }
 
         [RelayCommand]
@@ -58,6 +62,7 @@ namespace BojRankApp.ViewModel
             }
                 Users.Add(user);
             SelectedUser = user;
+            SaveFile();
         }
 
         [RelayCommand]
@@ -70,6 +75,7 @@ namespace BojRankApp.ViewModel
             {
                 Users.Remove(SelectedUser);
             }
+            SaveFile();
         }
         [RelayCommand]
         public async Task ResetUser()
@@ -91,6 +97,7 @@ namespace BojRankApp.ViewModel
                 Users.Add(u);
             }
 
+            SaveFile();
         }
         partial void OnSelectedUserChanged(User value)
         {
@@ -114,6 +121,36 @@ namespace BojRankApp.ViewModel
             }
         }
 
-        
+        // 저장 
+        public void SaveFile()
+        {
+            string path = "users.txt";
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true // 보기 좋게
+            };
+
+            string json = JsonSerializer.Serialize(Users, options);
+            File.WriteAllText(path, json);
+        }
+
+        public void LoadFile()
+        {
+            string path = "users.txt";
+
+            if (!File.Exists(path))
+                return;
+
+            string json = File.ReadAllText(path);
+            var users = JsonSerializer.Deserialize<List<User>>(json);
+
+            Users.Clear();
+            foreach (var user in users)
+            {
+                Users.Add(user);
+            }
+        }
     }
+
 }
