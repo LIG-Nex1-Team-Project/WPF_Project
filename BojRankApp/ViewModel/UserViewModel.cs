@@ -24,9 +24,10 @@ namespace BojRankApp.ViewModel
 
         private BojService bojService;
 
-        public ObservableCollection<User> Users { get; } 
-        public ObservableCollection<SolvedProblem> Problems { get; }
+        public ObservableCollection<User> Users { get; }
 
+        public ObservableCollection<Problem> Problems { get; }
+        
         [ObservableProperty]
         private string userId = string.Empty;
 
@@ -36,10 +37,17 @@ namespace BojRankApp.ViewModel
         [ObservableProperty]
         private User selectedUser;
 
+        [ObservableProperty]
+        private bool isSolvedChecked = true;
+
+        [ObservableProperty]
+        private bool isUnsolvedChecked;
+
+
         public UserViewModel()
         {
             bojService = new BojService();
-            Problems = new ObservableCollection<SolvedProblem>();
+            Problems = new ObservableCollection<Problem>();
             Users = bojService.LoadFile();
         }
 
@@ -100,6 +108,7 @@ namespace BojRankApp.ViewModel
         }
         partial void OnSelectedUserChanged(User value)
         {
+
             Problems.Clear();
 
             if (value == null) return;
@@ -121,7 +130,37 @@ namespace BojRankApp.ViewModel
                 SelectedSUser = null;
             }
         }
-         
+
+        private void RefreshProblems()
+        {
+            Problems.Clear();
+
+            if (SelectedUser == null) return;
+
+            if (IsSolvedChecked)
+            {
+                foreach (var p in SelectedUser.SolvedProblems)
+                    Problems.Add(p);
+            }
+
+            if (IsUnsolvedChecked)
+            {
+                foreach (var p in SelectedUser.UnSolvedProblems)
+                    Problems.Add(p);
+            }
+        }
+
+        partial void OnIsSolvedCheckedChanged(bool value)
+        {
+            RefreshProblems();
+        }
+
+        partial void OnIsUnsolvedCheckedChanged(bool value)
+        {
+            RefreshProblems();
+        }
+
+
     }
 
 }
