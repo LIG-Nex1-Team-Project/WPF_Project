@@ -23,12 +23,14 @@ namespace BojRankApp.Service
         private readonly HttpClient _client = new HttpClient();
         private const string ProblemApiPrefix = "https://solved.ac/api/v3/search/problem";
         private const string UserApiPrefix = "https://solved.ac/api/v3/user/show";
-        
+
         private const int PageElementNum = 50;
-        
+        private const int PageElementNum2 = 51;
+        private const int PageElementNum3 = 53;
+
         public BojService()
         {
-                Users = new ObservableCollection<User>();
+            Users = new ObservableCollection<User>();
         }
         public async Task<User> LoadUser(string userId)
         {
@@ -49,10 +51,10 @@ namespace BojRankApp.Service
 
                 int tier = node!["tier"]!.GetValue<int>();
                 int rating = node!["rating"]!.GetValue<int>();
-                
+
                 int solvedCount = node["solvedCount"]!.GetValue<int>();
                 //int unsolvedCount = node["unsolvedCount"]!.GetValue<int>();
-                
+
                 int page = (solvedCount / PageElementNum) + 1;
 
                 List<SolvedProblem> solvedProblems = await LoadSolvedProblem(userId, page);
@@ -69,7 +71,7 @@ namespace BojRankApp.Service
                    unsolvedProblems: unsolvedProblems
                    );
             }
-            catch(HttpRequestException e)
+            catch (HttpRequestException e)
             {
                 return null;
             }
@@ -78,7 +80,7 @@ namespace BojRankApp.Service
         public async Task<List<SolvedProblem>> LoadSolvedProblem(string userId, int page)
         {
             var builder = new UriBuilder(ProblemApiPrefix);
-            
+
             var query = HttpUtility.ParseQueryString(builder.Query);
             string encodedQuery = $"s@{userId}";
 
@@ -97,7 +99,7 @@ namespace BojRankApp.Service
 
                 var json = await _client.GetStringAsync(uri);
                 var root = JsonNode.Parse(json);
-                
+
 
                 foreach (var item in root["items"]!.AsArray())
                 {
@@ -140,7 +142,7 @@ namespace BojRankApp.Service
 
             var query = HttpUtility.ParseQueryString(builder.Query);
             string encodedQuery = $"t@{userId} !s@{userId}";
-          
+
             query["query"] = encodedQuery;
             query["sort"] = "level";
             query["direction"] = "desc";
@@ -203,14 +205,14 @@ namespace BojRankApp.Service
         public ObservableCollection<User> LoadFile()
         {
             string path = "users.txt";
-            
+
             if (!File.Exists(path))
                 return new ObservableCollection<User>();
 
             string json = File.ReadAllText(path);
             var users = JsonSerializer.Deserialize<List<User>>(json);
 
-           
+
             Users.Clear();
             foreach (var user in users)
             {

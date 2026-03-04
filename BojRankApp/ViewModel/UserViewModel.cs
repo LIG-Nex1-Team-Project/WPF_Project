@@ -24,6 +24,8 @@ namespace BojRankApp.ViewModel
 
         private BojService bojService;
 
+        private int test;
+
         public ObservableCollection<User> Users { get; }
 
         public ObservableCollection<Problem> Problems { get; }
