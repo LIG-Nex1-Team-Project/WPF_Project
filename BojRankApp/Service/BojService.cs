@@ -26,6 +26,7 @@ namespace BojRankApp.Service
 
         private const int PageElementNum = 50;
         private const int PageElementNum2 = 51;
+        private const int PageElementNum3 = 53;
 
         public BojService()
         {
